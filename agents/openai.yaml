@@ -1,0 +1,11 @@
+policy:
+  allow_implicit_invocation: true
+  display_name: "Video Subtitle Pipeline"
+  ui:
+    emoji: "🎬"
+    color: "#0EA5E9"
+    category: media
+  tool_dependencies:
+    - ffmpeg
+    - python3
+    - openai-whisper
