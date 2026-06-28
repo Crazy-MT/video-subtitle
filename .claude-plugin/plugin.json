@@ -1,0 +1,29 @@
+{
+  "name": "video-subtitle",
+  "version": "1.0.0",
+  "description": "Add, generate, translate, and burn subtitles into videos. Provides a complete pipeline: audio extraction (ffmpeg) -> speech-to-text (Whisper) -> AI translation -> subtitle burning (ffmpeg libass). Supports single and dual-language subtitle modes. / 给视频加字幕、生成字幕、翻译字幕、烧录字幕；支持单语和双语字幕。",
+  "author": {
+    "name": "video-subtitle contributors"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/Crazy-MT/video-subtitle",
+  "repository": "https://github.com/Crazy-MT/video-subtitle",
+  "keywords": [
+    "video",
+    "subtitle",
+    "srt",
+    "ass",
+    "whisper",
+    "ffmpeg",
+    "transcribe",
+    "translate",
+    "burn",
+    "硬字幕",
+    "双语字幕"
+  ],
+  "commands": "./commands",
+  "agents": "./agents",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./mcp/servers.json",
+  "skills": ["./SKILL.md"]
+}

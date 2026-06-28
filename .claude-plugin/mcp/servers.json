@@ -1,0 +1,11 @@
+{
+  "video-subtitle-tools": {
+    "command": "node",
+    "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/server.js"],
+    "description": "MCP server exposing video-subtitle operations as tools: extract_audio, transcribe, translate_srt, burn_subtitle, burn_dual_subtitle, list_style_presets. Wraps the Python scripts and returns structured JSON results.",
+    "env": {
+      "PYTHON_BIN": "python3",
+      "FFMPEG_BIN": "ffmpeg"
+    }
+  }
+}

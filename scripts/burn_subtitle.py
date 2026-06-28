@@ -15,11 +15,23 @@ Style presets:
     minimal     - Small white text 16pt, very thin outline — least intrusive
 """
 
-import argparse, os, subprocess, sys
+import argparse, os, subprocess, sys, platform
+
+# Font fallback for cross-platform rendering.
+# PingFang SC is macOS-only; Windows users should use Microsoft YaHei / SimHei.
+def default_font():
+    sysname = platform.system()
+    if sysname == "Darwin":
+        return "PingFang SC"
+    if sysname == "Windows":
+        return "Microsoft YaHei"
+    # Linux: prefer Noto CJK if installed (it usually is, with fonts-noto-cjk).
+    # Fall through to Helvetica, which is available on most distros.
+    return "Noto Sans CJK SC"
 
 STYLE_PRESETS = {
     "default": {
-        "FontName": "PingFang SC",
+        "FontName": default_font(),
         "FontSize": "18",
         "PrimaryColour": "&H00FFFFFF",
         "OutlineColour": "&H00222222",
@@ -31,7 +43,7 @@ STYLE_PRESETS = {
         "MarginV": "40",
     },
     "streaming": {
-        "FontName": "PingFang SC",
+        "FontName": default_font(),
         "FontSize": "16",
         "PrimaryColour": "&H00FFFFFF",
         "OutlineColour": "&H00222222",
@@ -43,7 +55,7 @@ STYLE_PRESETS = {
         "MarginV": "30",
     },
     "white_shadow": {
-        "FontName": "PingFang SC",
+        "FontName": default_font(),
         "FontSize": "20",
         "PrimaryColour": "&H00FFFFFF",
         "OutlineColour": "&H00000000",
@@ -55,7 +67,7 @@ STYLE_PRESETS = {
         "MarginV": "40",
     },
     "yellow_black": {
-        "FontName": "PingFang SC",
+        "FontName": default_font(),
         "FontSize": "20",
         "PrimaryColour": "&H0000FFFF",
         "OutlineColour": "&H00000000",
@@ -67,7 +79,7 @@ STYLE_PRESETS = {
         "MarginV": "40",
     },
     "minimal": {
-        "FontName": "PingFang SC",
+        "FontName": default_font(),
         "FontSize": "16",
         "PrimaryColour": "&H00FFFFFF",
         "OutlineColour": "&H00222222",
@@ -119,10 +131,17 @@ def main():
     print(f"Output: {args.output}")
 
     # Use subtitles filter with SRT (ffmpeg converts SRT to ASS internally)
+    #
+    # Cross-platform path handling: ffmpeg's libass parser is sensitive to
+    # backslashes and drive-letter colons on Windows. We always pass an
+    # absolute, forward-slash path.
+    srt_for_filter = os.path.abspath(args.srt).replace("\\", "/")
+    IS_WINDOWS = platform.system() == "Windows"
+
     cmd = [
         "ffmpeg", "-y",
-        "-i", args.video,
-        "-vf", f"subtitles={args.srt}:force_style='{force_style}'",
+        "-i", os.path.abspath(args.video),
+        "-vf", f"subtitles={srt_for_filter}:force_style='{force_style}'",
         "-c:v", "libx264",
         "-crf", args.crf,
         "-preset", args.preset,

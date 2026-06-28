@@ -8,7 +8,28 @@ Usage:
     python burn_dual_subtitle.py <video> <original.srt> <translated.srt> [--output <path>]
 """
 
-import argparse, os, subprocess, sys, re, textwrap
+import argparse, os, subprocess, sys, re, textwrap, platform
+
+# Font fallback for cross-platform rendering.
+# ASS font names are platform-dependent:
+#   - macOS:   PingFang SC, Helvetica
+#   - Windows: Microsoft YaHei (or SimHei), Arial
+#   - Linux:   Noto Sans CJK SC (after `apt install fonts-noto-cjk`), DejaVu Sans
+def _orig_font():
+    sysname = platform.system()
+    if sysname == "Windows":
+        return "Microsoft YaHei"
+    if sysname == "Linux":
+        return "Noto Sans CJK SC"
+    return "PingFang SC"
+
+def _trans_font():
+    sysname = platform.system()
+    if sysname == "Windows":
+        return "Arial"
+    if sysname == "Linux":
+        return "DejaVu Sans"
+    return "Helvetica"
 
 # ── helpers ──────────────────────────────────────────────────────────────
 
@@ -73,6 +94,10 @@ def build_ass(video_width, video_height, original_srt, translated_srt,
     # Style: original on top (higher MarginV), translation on bottom (lower MarginV)
     # Alignment=2 = bottom-center
 
+    # Resolve platform-specific font names at module level.
+    ORIG_FONT = _orig_font()
+    TRANS_FONT = _trans_font()
+
     ass_header = f"""[Script Info]
 Title: Dual Subtitles
 ScriptType: v4.00+
@@ -83,8 +108,8 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Orig,PingFang SC,18,&H00FFFFFF,&H000000FF,&H00222222,&H88000000,0,0,0,0,100,100,0,0,1,1.2,0,2,30,30,60,1
-Style: Trans,Helvetica,16,&H00CCFFCC,&H000000FF,&H00222222,&H88000000,0,0,0,0,100,100,0,0,1,1.2,0,2,30,30,18,1
+Style: Orig,{ORIG_FONT},18,&H00FFFFFF,&H000000FF,&H00222222,&H88000000,0,0,0,0,100,100,0,0,1,1.2,0,2,30,30,60,1
+Style: Trans,{TRANS_FONT},16,&H00CCFFCC,&H000000FF,&H00222222,&H88000000,0,0,0,0,100,100,0,0,1,1.2,0,2,30,30,18,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -157,17 +182,20 @@ def main():
         f.write(ass_content)
     print(f"ASS file written: {ass_path}")
 
-    # Burn with ffmpeg
-    # macOS needs fonts path; PingFang SC should be available
+    # Burn with ffmpeg. Pass absolute forward-slash paths to avoid libass
+    # parser issues on Windows (backslashes and drive-letter colons).
+    abs_video = os.path.abspath(args.video).replace("\\", "/")
+    abs_ass = os.path.abspath(ass_path).replace("\\", "/")
+    abs_output = os.path.abspath(args.output).replace("\\", "/")
     cmd = [
         "ffmpeg", "-y",
-        "-i", args.video,
-        "-vf", f"ass={ass_path}",
+        "-i", abs_video,
+        "-vf", f"ass={abs_ass}",
         "-c:v", "libx264",
         "-crf", "20",
         "-preset", "medium",
         "-c:a", "copy",
-        args.output
+        abs_output,
     ]
 
     print("Running ffmpeg...")

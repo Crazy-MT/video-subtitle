@@ -1,0 +1,57 @@
+{
+  "name": "video-subtitle-skill",
+  "version": "1.0.0",
+  "description": "One-line install for the video-subtitle Agent Skills plugin — extracts audio, transcribes with Whisper, translates via AI, and burns subtitles into videos. Compatible with Claude Code, Codex CLI, ChatGPT, Cursor, and 30+ other AI agents.",
+  "keywords": [
+    "video",
+    "subtitle",
+    "srt",
+    "ass",
+    "whisper",
+    "ffmpeg",
+    "transcribe",
+    "translate",
+    "burn",
+    "agent-skills",
+    "claude-code",
+    "codex",
+    "chatgpt"
+  ],
+  "license": "MIT",
+  "author": "video-subtitle contributors",
+  "homepage": "https://github.com/Crazy-MT/video-subtitle",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Crazy-MT/video-subtitle.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Crazy-MT/video-subtitle/issues"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "bin": {
+    "video-subtitle-install": "bin/install.js",
+    "video-subtitle-verify": "bin/verify.js"
+  },
+  "files": [
+    "bin/",
+    "scripts/",
+    "examples/",
+    "references/",
+    "agents/",
+    "SKILL.md",
+    "README.md",
+    "LICENSE",
+    "agents/openai.yaml",
+    "package.json"
+  ],
+  "scripts": {
+    "postinstall": "node bin/announce.js",
+    "verify": "node bin/verify.js",
+    "install:claude": "node bin/install.js --target claude",
+    "install:codex": "node bin/install.js --target codex",
+    "install:all": "node bin/install.js --target all",
+    "uninstall": "node bin/uninstall.js"
+  }
+}
