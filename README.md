@@ -98,6 +98,14 @@ The plugin adds:
 - MCP server (`extract_audio`, `transcribe`, `burn_subtitle`, ...)
 - Pre-tool hooks that block self-overwrite and system-path writes
 
+### Option D — Download release (minimal, any AI agent)
+
+Download the latest `video-subtitle.zip` from [Releases](https://github.com/Crazy-MT/video-subtitle/releases), unzip it, then tell your AI agent:
+
+> Install this skill: read SKILL.md and make scripts/ available. When the user asks for video subtitles, follow the workflow in SKILL.md.
+
+The release contains only `SKILL.md` + `scripts/` — no npm, no plugin hooks, no extras. Works with any agent that can read a Markdown skill file and run shell commands.
+
 ## Pipeline
 
 ```

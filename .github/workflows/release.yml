@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Package release assets
+        run: |
+          mkdir -p dist/video-subtitle
+          cp SKILL.md dist/video-subtitle/
+          cp -R scripts dist/video-subtitle/
+          cd dist
+          zip -r video-subtitle.zip video-subtitle
+          tar -czf video-subtitle.tar.gz video-subtitle
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/video-subtitle.zip
+            dist/video-subtitle.tar.gz
+          generate_release_notes: true
