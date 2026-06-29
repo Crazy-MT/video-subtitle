@@ -31,7 +31,7 @@
     "node": ">=16"
   },
   "bin": {
-    "video-subtitle-install": "bin/install.js",
+    "video-subtitle-skill": "bin/install.js",
     "video-subtitle-verify": "bin/verify.js"
   },
   "files": [
