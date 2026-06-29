@@ -1,6 +1,6 @@
 {
   "name": "video-subtitle-skill",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "One-line install for the video-subtitle Agent Skills plugin — extracts audio, transcribes with Whisper, translates via AI, and burns subtitles into videos. Compatible with Claude Code, Codex CLI, ChatGPT, Cursor, and 30+ other AI agents.",
   "keywords": [
     "video",
