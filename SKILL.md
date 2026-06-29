@@ -21,13 +21,6 @@ metadata:
   language: en
   language_secondary: zh-CN
 allowed-tools: Bash
-when_to_use: |
-  Use this skill whenever the user wants any of:
-  - Transcribe a video's speech to timestamped subtitles (SRT)
-  - Translate existing subtitles to another language
-  - Hardcode/burn subtitles into a video (single or dual language)
-  - Extract a video's audio for further processing
-agent_created: true
 ---
 
 # Video Subtitle Pipeline / 视频字幕流水线
